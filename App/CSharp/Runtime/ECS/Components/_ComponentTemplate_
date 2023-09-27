@@ -1,0 +1,46 @@
+﻿#if FALSE // THIS IS FOR TEMPLATE PURPOSES ONLY. DO NOT USE.
+namespace App.ECS
+{
+    public struct Component : IComponent<Component>
+    {
+        // Properties go here
+
+        public Component(int property)
+        {
+            // Set Properties
+        }
+
+        #region Overrides and Operators
+
+        public override bool Equals(object obj)
+        {
+            if (obj is not Component c)
+                return false;
+
+            return Equals(c);
+        }
+
+        public bool Equals(Component other) => ReferenceEquals(this, other);
+
+        public int CompareTo(Component other) => ReferenceEquals(this, other) ? 0 : 1;
+
+        public override int GetHashCode() => 0; // property.GetHashCode();
+
+        public override string ToString() => $"Custom ToString()";
+
+        public static bool operator ==(Component c1, Component c2) => c1.Equals(c2);
+
+        public static bool operator !=(Component c1, Component c2) => !(c1 == c2);
+
+        public static bool operator >(Component c1, Component c2) => c1.CompareTo(c2) == 1;
+
+        public static bool operator <(Component c1, Component c2) => c1.CompareTo(c2) == -1;
+
+        public static bool operator >=(Component c1, Component c2) => c1.CompareTo(c2) >= 0;
+
+        public static bool operator <=(Component c1, Component c2) => c1.CompareTo(c2) <= 0;
+
+        #endregion
+    }
+}
+#endif

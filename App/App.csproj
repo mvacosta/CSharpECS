@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+    <ProjectGuid>{01207CAC-F597-49BF-8E65-91012394723B}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>App</RootNamespace>
+    <AssemblyName>Tutorial</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <StartupObject>Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <IntermediateOutputPath>obj\Debug</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <IntermediateOutputPath>obj\Release</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <IntermediateOutputPath>obj\Debug</IntermediateOutputPath>
+    <AssemblyName>App</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <IntermediateOutputPath>obj\Debug</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <IntermediateOutputPath>obj\Release</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <IntermediateOutputPath>obj\Release</IntermediateOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="CSharp\" />
+    <Folder Include="CSharp\Runtime\" />
+    <Folder Include="CSharp\Runtime\Update\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\FNA\FNA.csproj">
+      <Name>FNA</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CSharp\App.cs" />
+    <Compile Include="CSharp\Runtime\AbstractDisposable.cs" />
+    <Compile Include="CSharp\Runtime\GameManager.cs" />
+    <Compile Include="CSharp\Runtime\Update\UpdateManager.cs" />
+    <Compile Include="CSharp\Runtime\Update\UpdateHelper.cs" />
+    <Compile Include="CSharp\Runtime\Update\DelayedCallbacks.cs" />
+    <Compile Include="CSharp\Runtime\IReusable.cs" />
+    <Compile Include="CSharp\Runtime\ECS\Core\ECSWorld.cs" />
+    <Compile Include="CSharp\Runtime\ECS\Core\ECSInjector.cs" />
+    <Compile Include="CSharp\Runtime\ECS\Core\IComponent.cs" />
+    <Compile Include="CSharp\Runtime\ECS\Core\ExecuteAttributes.cs" />
+    <Compile Include="CSharp\Runtime\ECS\Core\AbstractSystem.cs" />
+    <Compile Include="CSharp\Runtime\ECS\Core\ECSManager.cs" />
+    <Compile Include="CSharp\Runtime\ECS\Core\Entity.cs" />
+    <Compile Include="CSharp\Runtime\ECS\Core\ComponentManager\ComponentContainer.cs" />
+    <Compile Include="CSharp\Runtime\ECS\Core\ComponentManager\GetArchetypes.cs" />
+    <Compile Include="CSharp\Runtime\ECS\Core\ComponentManager\Archetype.cs" />
+    <Compile Include="CSharp\Runtime\ECS\Core\ComponentManager\ComponentManager.cs" />
+    <Compile Include="CSharp\Runtime\ECS\Components\EntityName.cs" />
+    <Compile Include="CSharp\Runtime\ECS\Components\TagComponents.cs" />
+    <Compile Include="CSharp\Runtime\ECS\Components\Sprite.cs" />
+    <Compile Include="CSharp\Runtime\ECS\Components\Transform.cs" />
+    <Compile Include="CSharp\Runtime\ECS\Systems\SpriteRendererSystem.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\TestTexture.png" />
+    <None Include="Content\TestSFX.wav" />
+    <None Include="CSharp\Runtime\ECS\Components\_ComponentTemplate_" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <TextStylePolicy inheritsSet="null" scope="text/x-csharp" />
+          <CSharpFormattingPolicy IndentBlock="True" IndentBraces="False" IndentSwitchSection="True" IndentSwitchCaseSection="True" LabelPositioning="OneLess" NewLinesForBracesInTypes="True" NewLinesForBracesInMethods="True" NewLinesForBracesInProperties="True" NewLinesForBracesInAccessors="True" NewLinesForBracesInAnonymousMethods="True" NewLinesForBracesInControlBlocks="True" NewLinesForBracesInAnonymousTypes="True" NewLinesForBracesInObjectCollectionArrayInitializers="True" NewLinesForBracesInLambdaExpressionBody="True" NewLineForElse="True" NewLineForCatch="True" NewLineForFinally="True" NewLineForMembersInObjectInit="True" NewLineForMembersInAnonymousTypes="True" NewLineForClausesInQuery="True" SpacingAfterMethodDeclarationName="False" SpaceWithinMethodDeclarationParenthesis="False" SpaceBetweenEmptyMethodDeclarationParentheses="False" SpaceAfterMethodCallName="False" SpaceWithinMethodCallParentheses="False" SpaceBetweenEmptyMethodCallParentheses="False" SpaceAfterControlFlowStatementKeyword="True" SpaceWithinExpressionParentheses="False" SpaceWithinCastParentheses="False" SpaceWithinOtherParentheses="False" SpaceAfterCast="False" SpacesIgnoreAroundVariableDeclaration="False" SpaceBeforeOpenSquareBracket="False" SpaceBetweenEmptySquareBrackets="False" SpaceWithinSquareBrackets="False" SpaceAfterColonInBaseTypeDeclaration="True" SpaceAfterComma="True" SpaceAfterDot="False" SpaceAfterSemicolonsInForStatement="True" SpaceBeforeColonInBaseTypeDeclaration="True" SpaceBeforeComma="False" SpaceBeforeDot="False" SpaceBeforeSemicolonsInForStatement="False" SpacingAroundBinaryOperator="Single" WrappingPreserveSingleLine="True" WrappingKeepStatementsOnSingleLine="True" scope="text/x-csharp" />
+          <TextStylePolicy TabWidth="4" IndentWidth="4" RemoveTrailingWhitespace="True" NoTabsAfterNonTabs="False" FileWidth="80" TabsToSpaces="True" EolMarker="Windows" scope="text/plain" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
+</Project>
