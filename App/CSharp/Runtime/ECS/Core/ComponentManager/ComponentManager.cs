@@ -8,14 +8,9 @@ namespace App.ECS
     /// </summary>
     public sealed partial class ComponentManager : AbstractDisposable, IReusable
     {
-        private Dictionary<Type, ComponentContainer> components;
+        private Dictionary<Type, ComponentContainer> components = new Dictionary<Type, ComponentContainer>();
 
-        public bool IsRetired { get; private set; }
-
-        public ComponentManager()
-        {
-            components = new Dictionary<Type, ComponentContainer>();
-        }
+        public bool IsRetired { get; private set; } = false;
 
         protected override void DisposeManagedResources()
         {

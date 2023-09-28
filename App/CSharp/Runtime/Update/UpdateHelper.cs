@@ -16,14 +16,11 @@ namespace App.Update
             private UpdateManager updateManager = null;
 
             public readonly int ID;
-            public bool IsRetired { get; private set; }
+            public bool IsRetired { get; private set; } = true;
 
             public UpdateHelper(int id, UpdateManager updateManager)
             {
                 ID = id;
-
-                IsRetired = true;
-
                 this.updateManager = updateManager;
             }
 
@@ -146,6 +143,8 @@ namespace App.Update
 
                 updateManager.OnUpdate += OnAfterConditionUpdate;
 
+                IsRetired = false;
+
                 return ID;
             }
 
@@ -164,6 +163,8 @@ namespace App.Update
                 this.condition = condition;
 
                 updateManager.OnUpdate += OnWhileConditionUpdate;
+
+                IsRetired = false;
 
                 return ID;
             }

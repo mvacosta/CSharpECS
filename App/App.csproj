@@ -81,7 +81,6 @@
     <Compile Include="CSharp\Runtime\Update\DelayedCallbacks.cs" />
     <Compile Include="CSharp\Runtime\IReusable.cs" />
     <Compile Include="CSharp\Runtime\ECS\Core\ECSWorld.cs" />
-    <Compile Include="CSharp\Runtime\ECS\Core\ECSInjector.cs" />
     <Compile Include="CSharp\Runtime\ECS\Core\IComponent.cs" />
     <Compile Include="CSharp\Runtime\ECS\Core\ExecuteAttributes.cs" />
     <Compile Include="CSharp\Runtime\ECS\Core\AbstractSystem.cs" />

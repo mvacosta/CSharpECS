@@ -10,19 +10,12 @@ namespace App.ECS
         /// </summary>
         internal sealed class ComponentContainer : AbstractDisposable, IReusable
         {
-            private List<int> openIndices;
+            private List<int> openIndices = new List<int>();
 
-            public List<IComponent> Components;
-            public Dictionary<Entity, int> EntityIndices;
+            public List<IComponent> Components = new List<IComponent>();
+            public Dictionary<Entity, int> EntityIndices = new Dictionary<Entity, int>();
 
-            public bool IsRetired { get; private set; }
-
-            public ComponentContainer()
-            {
-                openIndices = new List<int>();
-                Components = new List<IComponent>();
-                EntityIndices = new Dictionary<Entity, int>();
-            }
+            public bool IsRetired { get; private set; } = false;
 
             protected override void DisposeManagedResources()
             {

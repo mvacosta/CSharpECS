@@ -5,15 +5,20 @@ using Microsoft.Xna.Framework.Graphics;
 namespace App.ECS
 {
     /// <summary>
-    /// Draws sprites in a basic matter using SpriteBatch.
+    /// Draws sprites in a basic manner using SpriteBatch.
     ///
     /// Components: Transform, Sprite
     /// </summary>
     public class SpriteRendererSystem : AbstractSystem
     {
-        public override void WorldInitialize(ECSWorld world)
+        public override void Initialize(ECSWorld world)
         {
             App.UpdateManager.OnDraw += (_) => DrawSprites(world.Components.GetArchetype<Transform, Sprite>());
+        }
+
+        public override void Retire()
+        {
+            //App.UpdateManager.OnDraw -= (_) => DrawSprites(world.Components.GetArchetype<Transform, Sprite>());
         }
 
         public void DrawSprites(Archetype components)

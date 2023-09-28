@@ -12,11 +12,11 @@ namespace App.Update
         private const int POOLED_HELPERS = 10;
         private const double FIXED_UPDATE_STEP = 1.0 / App.FIXED_FRAMERATE; // Simulate in 60 FPS
         private const double FIXED_DRAW_STEP = 1.0 / App.FIXED_FRAMERATE; // Locked FPS as a const for now; TODO: Have user set draw FPS
-        private const double RESET_THRESHOLD = 1.0 / 4.0; // MonoGame caps at 0.5 dt but our threshold is lower
+        private const double RESET_THRESHOLD = 1.0 / 4.0; // XNA caps at 0.5 dt but our threshold is lower
 
         private double updateStep = 0.0;
         private double drawStep = 0.0;
-        private HashSet<UpdateHelper> helpers = null;
+        private HashSet<UpdateHelper> helpers = new HashSet<UpdateHelper>();
 
         /// <summary>
         /// Use for user input, networked input & output, or timing.
@@ -65,8 +65,6 @@ namespace App.Update
 
         private UpdateManager()
         {
-            helpers = new HashSet<UpdateHelper>();
-
             for (int i = 0; i < POOLED_HELPERS; i++)
             {
                 helpers.Add(new UpdateHelper(i, this));
@@ -98,10 +96,10 @@ namespace App.Update
 
 #if ALLOW_UPDATE_RESET
             // If time is starting to get real delayed, reset to try to smooth things out
-            if (m_UpdateStep >= RESET_THRESHOLD)
+            if (updateStep >= RESET_THRESHOLD)
             {
-                m_UpdateStep = 0.0;
-                m_DrawStep = 0.0;
+                updateStep = 0.0;
+                drawStep = 0.0;
             
                 return;
             }

@@ -7,9 +7,9 @@ namespace App.ECS
     /// </summary>
     public abstract class AbstractSystem : AbstractDisposable, IReusable
     {
-        public bool IsRetired { get; private set; }
+        public bool IsRetired { get; private set; } = true;
 
-        public abstract void WorldInitialize(ECSWorld world);
+        public abstract void Initialize(ECSWorld world);
 
         public virtual void Retire() { }
     }

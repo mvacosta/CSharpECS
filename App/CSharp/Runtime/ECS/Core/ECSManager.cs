@@ -14,17 +14,14 @@ namespace App.ECS
         private const int ENTITY_ADD_AMOUNT = ENTITY_INIT_COUNT / 2;
 
         private int entityCount = 0;
-        private HashSet<Entity> entities = null;
-        private HashSet<ECSWorld> worlds = null;
+        private HashSet<Entity> entities = new HashSet<Entity>(ENTITY_INIT_COUNT * 2);
+        private HashSet<ECSWorld> worlds = new HashSet<ECSWorld>();
 
         public int AvailableEntities { get { return entities.Count; } }
 
         public ECSManager()
         {
-            entities = new HashSet<Entity>();
             CreateNewEntities(ENTITY_INIT_COUNT);
-
-            worlds = new HashSet<ECSWorld>();
         }
 
         protected override void DisposeManagedResources()
@@ -59,7 +56,7 @@ namespace App.ECS
             entities.Clear();
         }
 
-        public void RequestEntities(ECSWorld toWorld, int amount)
+        public void RequestEntities(ref ECSWorld toWorld, int amount)
         {
             // Create more entities if requred
             if (amount > entities.Count)

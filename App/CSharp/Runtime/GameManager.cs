@@ -17,7 +17,7 @@ namespace App
         {
             ECSWorld appWorld = App.ECSManager.AddWorld();
 
-            App.ECSManager.RequestEntities(appWorld, 1000);
+            App.ECSManager.RequestEntities(ref appWorld, 1000);
 
             appWorld.TEST();
             appWorld.AddSystem<SpriteRendererSystem>();

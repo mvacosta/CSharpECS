@@ -5,54 +5,16 @@ using Microsoft.Xna.Framework;
 
 namespace App.ECS
 {
-    /// <summary>
-    /// BaseWorld will be the base of all Worlds that make use of entities. Entity-Component management is handled via ComponentManager.
-    /// Worlds request entities from ECSManager and will hand them back when they are no longer needed.
-    /// Worlds will also manage their own BaseSystems and will be the point of interaction between each BaseSystem and ComponentManager.
-    /// </summary>
     public sealed class ECSWorld : AbstractDisposable, IReusable
     {
-        private HashSet<Entity> entities = null;
-        private HashSet<AbstractSystem> systems = null;
-        private ComponentManager components = null;
-        private ECSManager ecsManager = null;
+        private HashSet<Entity> entities = new HashSet<Entity>();
+        private Dictionary<Type, AbstractSystem> systems = new Dictionary<Type, AbstractSystem>();
+        private ComponentManager components = new ComponentManager();
+        private ECSManager ecsManager = App.ECSManager;
 
-        public bool IsRetired { get; private set; }
+        public string WorldName { get; set; } = "New World";
+        public bool IsRetired { get; private set; } = false;
         public ComponentManager Components => components;
-
-        public ECSWorld()
-        {
-            ecsManager = App.ECSManager;
-            entities = new HashSet<Entity>();
-            systems = new HashSet<AbstractSystem>();
-            components = new ComponentManager();
-        }
-
-        protected override void DisposeManagedResources()
-        {
-            ecsManager.ReturnEntities(entities);
-
-            foreach (AbstractSystem system in systems)
-                system.Dispose();
-
-            systems.Clear();
-            systems = null;
-
-            components.Dispose();
-            components = null;
-        }
-
-        protected override void DisposeUnmanagedResources()
-        {
-            // Entities are managed by ECSManager so return them first
-            if(ecsManager != null && !IsDisposed)
-                ecsManager.ReturnEntities(entities);
-
-            ecsManager = null;
-
-            entities?.Clear();
-            entities = null;
-        }
 
         public void TEST()
         {
@@ -75,9 +37,35 @@ namespace App.ECS
             }
         }
 
+        protected override void DisposeManagedResources()
+        {
+            ecsManager.ReturnEntities(entities);
+
+            foreach (AbstractSystem system in systems.Values)
+                system.Dispose();
+
+            systems.Clear();
+            systems = null;
+
+            components.Dispose();
+            components = null;
+        }
+
+        protected override void DisposeUnmanagedResources()
+        {
+            // Entities are managed by ECSManager so return them first
+            if(ecsManager != null && !IsDisposed)
+                ecsManager.ReturnEntities(entities);
+
+            ecsManager = null;
+
+            entities?.Clear();
+            entities = null;
+        }
+
         public void Retire()
         {
-            foreach (AbstractSystem system in systems)
+            foreach (AbstractSystem system in systems.Values)
                 system.Retire();
 
             components.Retire();
@@ -87,15 +75,29 @@ namespace App.ECS
 
         public T AddSystem<T>() where T : AbstractSystem, new()
         {
-            T system = new T();
-
-            if(systems.Add(system))
+            Type type = typeof(T);
+            if (!systems.ContainsKey(type))
             {
-                system.WorldInitialize(this);
-                return system;
+                systems.Add(type, new T());
             }
 
-            return null; // This should return the system if it already has one (also not create an empty one first...)
+            if (systems[type].IsRetired)
+            {
+                systems[type].Initialize(this);
+            }
+
+            return systems[type] as T;
+        }
+
+        public bool RemoveSystem<T>() where T : AbstractSystem, new()
+        {
+            Type type = typeof(T);
+            if (systems.ContainsKey(type) && !systems[type].IsRetired)
+            {
+                systems[type].Retire();
+            }
+
+            return false;
         }
 
         public void ReceiveEntities(HashSet<Entity> newEntities)
