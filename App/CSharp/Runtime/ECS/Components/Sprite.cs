@@ -29,15 +29,15 @@ namespace App.ECS
 
         #region Overrides and Operators
 
-        public override bool Equals(object obj) => obj is Sprite c && Equals(c);
+        public override readonly bool Equals(object obj) => obj is Sprite c && Equals(c);
 
-        public bool Equals(Sprite other) => ReferenceEquals(this, other);
+        public readonly bool Equals(Sprite other) => ReferenceEquals(this, other);
 
-        public int CompareTo(Sprite other) => ReferenceEquals(this, other) ? 0 : 1;
+        public readonly int CompareTo(Sprite other) => ReferenceEquals(this, other) ? 0 : 1;
 
-        public override int GetHashCode() => Texture.GetHashCode();
+        public override readonly int GetHashCode() => Texture.GetHashCode();
 
-        public override string ToString() => Texture.ToString();
+        public override readonly string ToString() => Texture.ToString();
 
         public static bool operator ==(Sprite e1, Sprite e2) => e1.Equals(e2);
 

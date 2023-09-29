@@ -7,15 +7,15 @@
 
         #region Overrides and Operators
 
-        public override bool Equals(object obj) => obj is TemplateTag;
+        public override readonly bool Equals(object obj) => obj is TemplateTag;
 
-        public bool Equals(TemplateTag other) => true;
+        public readonly bool Equals(TemplateTag other) => true;
 
-        public int CompareTo(TemplateTag other) => 0;
+        public readonly int CompareTo(TemplateTag other) => 0;
 
-        public override int GetHashCode() => TAG.GetHashCode();
+        public override readonly int GetHashCode() => TAG.GetHashCode();
 
-        public override string ToString() => $"Tag: {TAG}";
+        public override readonly string ToString() => $"Tag: {TAG}";
 
         public static bool operator ==(TemplateTag c1, TemplateTag c2) => c1.Equals(c2);
 
@@ -42,15 +42,15 @@
 
         #region Overrides and Operators
 
-        public override bool Equals(object obj) => obj is PlayerTag;
+        public override readonly bool Equals(object obj) => obj is PlayerTag;
 
-        public bool Equals(PlayerTag other) => true;
+        public readonly bool Equals(PlayerTag other) => true;
 
-        public int CompareTo(PlayerTag other) => 0;
+        public readonly int CompareTo(PlayerTag other) => 0;
 
-        public override int GetHashCode() => TAG.GetHashCode();
+        public override readonly int GetHashCode() => TAG.GetHashCode();
 
-        public override string ToString() => $"Tag: {TAG}";
+        public override readonly string ToString() => $"Tag: {TAG}";
 
         public static bool operator ==(PlayerTag c1, PlayerTag c2) => c1.Equals(c2);
 
@@ -76,15 +76,15 @@
 
         #region Overrides and Operators
 
-        public override bool Equals(object obj) => obj is MainCameraTag;
+        public override readonly bool Equals(object obj) => obj is MainCameraTag;
 
-        public bool Equals(MainCameraTag other) => true;
+        public readonly bool Equals(MainCameraTag other) => true;
 
-        public int CompareTo(MainCameraTag other) => 0;
+        public readonly int CompareTo(MainCameraTag other) => 0;
 
-        public override int GetHashCode() => TAG.GetHashCode();
+        public override readonly int GetHashCode() => TAG.GetHashCode();
 
-        public override string ToString() => $"Tag: {TAG}";
+        public override readonly string ToString() => $"Tag: {TAG}";
 
         public static bool operator ==(MainCameraTag c1, MainCameraTag c2) => c1.Equals(c2);
 

@@ -16,7 +16,7 @@ namespace App.Update
 
         private double updateStep = 0.0;
         private double drawStep = 0.0;
-        private HashSet<UpdateHelper> helpers = new HashSet<UpdateHelper>();
+        private HashSet<UpdateHelper> helpers = new();
 
         /// <summary>
         /// Use for user input, networked input & output, or timing.
@@ -55,7 +55,7 @@ namespace App.Update
 
         public static UpdateManager CreateUpdateManager(out DeltaHandler update, out DeltaHandler draw)
         {
-            UpdateManager manager = new UpdateManager();
+            var manager = new UpdateManager();
 
             update = manager.HandleUpdate;
             draw = manager.HandleDraw;

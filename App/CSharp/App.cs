@@ -5,10 +5,8 @@ static class Program
     [STAThread]
     static void Main(string[] _)
     {
-        using (var a = new App.App.AppInstance())
-        {
-            a.Run();
-        }
+        using var a = new App.App.AppInstance();
+        a.Run();
     }
 }
 
@@ -80,11 +78,14 @@ namespace App
                 ECSManager = new ECSManager();
 
                 UpdateManager.OnUpdate += HandleExitGameInput;
+                UpdateManager.OnDraw += HandleClearScreen;
             }
 
             protected override void Dispose(bool disposing)
             {
                 UpdateManager.OnUpdate -= HandleExitGameInput;
+                UpdateManager.OnDraw -= HandleClearScreen;
+
                 handleUpdate = null;
                 handleDraw = null;
 
@@ -109,18 +110,12 @@ namespace App
 
             protected override void LoadContent()
             {
-
+                //
             }
 
             protected override void UnloadContent()
             {
-
-            }
-
-            private void HandleExitGameInput(double _)
-            {
-                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                    Exit();
+                //
             }
 
             protected override void Update(GameTime gameTime)
@@ -132,11 +127,20 @@ namespace App
 
             protected override void Draw(GameTime gameTime)
             {
-                GraphicsDevice.Clear(CLEAR_COLOR);
-
                 handleDraw(gameTime.ElapsedGameTime.TotalSeconds);
 
                 base.Draw(gameTime);
+            }
+
+            private void HandleExitGameInput(double _)
+            {
+                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+                    Exit();
+            }
+
+            private void HandleClearScreen(double _)
+            {
+                GraphicsDevice.Clear(CLEAR_COLOR);
             }
         }
 

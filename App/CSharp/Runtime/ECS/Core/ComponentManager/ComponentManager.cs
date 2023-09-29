@@ -8,7 +8,7 @@ namespace App.ECS
     /// </summary>
     public sealed partial class ComponentManager : AbstractDisposable, IReusable
     {
-        private Dictionary<Type, ComponentContainer> components = new Dictionary<Type, ComponentContainer>();
+        private Dictionary<Type, ComponentContainer> components = new();
 
         public bool IsRetired { get; private set; } = false;
 
@@ -38,7 +38,9 @@ namespace App.ECS
         private void AddNewComponentType<T>() where T : struct, IComponent<T>
         {
             if (!components.ContainsKey(typeof(T)))
+            {
                 components.Add(typeof(T), new ComponentContainer());
+            }
         }
 
         /// <summary>

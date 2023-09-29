@@ -14,8 +14,8 @@ namespace App.ECS
         private const int ENTITY_ADD_AMOUNT = ENTITY_INIT_COUNT / 2;
 
         private int entityCount = 0;
-        private HashSet<Entity> entities = new HashSet<Entity>(ENTITY_INIT_COUNT * 2);
-        private HashSet<ECSWorld> worlds = new HashSet<ECSWorld>();
+        private HashSet<Entity> entities = new(ENTITY_INIT_COUNT * 2);
+        private HashSet<ECSWorld> worlds = new();
 
         public int AvailableEntities { get { return entities.Count; } }
 
@@ -26,8 +26,10 @@ namespace App.ECS
 
         protected override void DisposeManagedResources()
         {
-            foreach (ECSWorld world in worlds)
+            foreach (var world in worlds)
+            {
                 world.Dispose();
+            }
 
             worlds.Clear();
             worlds = null;
@@ -38,20 +40,24 @@ namespace App.ECS
 
         public ECSWorld AddWorld()
         {
-            ECSWorld world = new ECSWorld();
+            var world = new ECSWorld();
 
             if (worlds.Add(world))
+            {
                 return world;
+            }
 
             return null;
         }
 
-        public void ReturnEntities(HashSet<Entity> entities)
+        public void ReturnEntities(HashSet<Entity> returning)
         {
             if (entities == null || entities.Count <= 0)
+            {
                 return;
+            }
 
-            this.entities.UnionWith(entities);
+            entities.UnionWith(returning);
 
             entities.Clear();
         }
@@ -60,10 +66,12 @@ namespace App.ECS
         {
             // Create more entities if requred
             if (amount > entities.Count)
+            {
                 CreateNewEntities(amount - entities.Count + ENTITY_ADD_AMOUNT);
+            }
 
             int count = 0;
-            HashSet<Entity> worldEntities = new HashSet<Entity>();
+            var worldEntities = new HashSet<Entity>();
             foreach(var entity in entities)
             {
                 worldEntities.Add(entity);

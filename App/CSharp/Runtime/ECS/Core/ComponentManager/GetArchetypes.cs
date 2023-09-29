@@ -8,14 +8,27 @@ namespace App.ECS
         #region GetArchetypes Public Methods
 
         /// <summary>
-        /// An archetype made up of one component. // TODO: Is this one needed?
+        /// An archetype made up of one component.
         /// </summary>
         /// <typeparam name="T">Any IComponent struct manipulable by a BaseSystem.</typeparam>
         /// <returns>A container of all of the entities and associated components that make up the requested archetype.</returns>
-        public Archetype GetArchetype<T>()
+        public (int count, T[]) GetArchetype<T>()
             where T : struct, IComponent<T>
         {
-            return InternalGetArchetype(typeof(T));
+            Type t = typeof(T);
+
+            var entities = new HashSet<Entity>(components[t].EntityIndices.Keys);
+
+            T[] tArray = new T[entities.Count];
+
+            var eIndices = components[t].EntityIndices;
+            foreach (Entity entity in entities)
+            {
+                int e = eIndices[entity];
+                tArray[e] = (T)components[t].Components[e];
+            }
+
+            return (entities.Count, tArray);
         }
 
         /// <summary>
@@ -24,11 +37,27 @@ namespace App.ECS
         /// <typeparam name="T1">Any IComponent struct manipulable by a BaseSystem.</typeparam>
         /// <typeparam name="T2">Any IComponent struct manipulable by a BaseSystem.</typeparam>
         /// <returns>A container of all of the entities and associated components that make up the requested archetype.</returns>
-        public Archetype GetArchetype<T1, T2>()
+        public (int count, T1[], T2[]) GetArchetype<T1, T2>()
             where T1 : struct, IComponent<T1>
             where T2 : struct, IComponent<T2>
         {
-            return InternalGetArchetype(typeof(T1), typeof(T2));
+            Type t1 = typeof(T1), t2 = typeof(T2);
+
+            var entities = new HashSet<Entity>(components[t1].EntityIndices.Keys);
+            entities.IntersectWith(components[t2].EntityIndices.Keys);
+
+            T1[] t1Array = new T1[entities.Count];
+            T2[] t2Array = new T2[entities.Count];
+
+            var eIndices = components[t1].EntityIndices;
+            foreach (Entity entity in entities)
+            {
+                int e = eIndices[entity];
+                t1Array[e] = (T1)components[t1].Components[e];
+                t2Array[e] = (T2)components[t2].Components[e];
+            }
+
+            return (entities.Count, t1Array, t2Array);
         }
 
         /// <summary>
@@ -38,12 +67,31 @@ namespace App.ECS
         /// <typeparam name="T2">Any IComponent struct manipulable by a BaseSystem.</typeparam>
         /// <typeparam name="T3">Any IComponent struct manipulable by a BaseSystem.</typeparam>
         /// <returns>A container of all of the entities and associated components that make up the requested archetype.</returns>
-        public Archetype GetArchetype<T1, T2, T3>()
+        public (int count, T1[], T2[], T3[]) GetArchetype<T1, T2, T3>()
             where T1 : struct, IComponent<T1>
             where T2 : struct, IComponent<T2>
             where T3 : struct, IComponent<T3>
         {
-            return InternalGetArchetype(typeof(T1), typeof(T2), typeof(T3));
+            Type t1 = typeof(T1), t2 = typeof(T2), t3 = typeof(T3);
+
+            var entities = new HashSet<Entity>(components[t1].EntityIndices.Keys);
+            entities.IntersectWith(components[t2].EntityIndices.Keys);
+            entities.IntersectWith(components[t3].EntityIndices.Keys);
+
+            T1[] t1Array = new T1[entities.Count];
+            T2[] t2Array = new T2[entities.Count];
+            T3[] t3Array = new T3[entities.Count];
+
+            var eIndices = components[t1].EntityIndices;
+            foreach (Entity entity in entities)
+            {
+                int e = eIndices[entity];
+                t1Array[e] = (T1)components[t1].Components[e];
+                t2Array[e] = (T2)components[t2].Components[e];
+                t3Array[e] = (T3)components[t3].Components[e];
+            }
+
+            return (entities.Count, t1Array, t2Array, t3Array);
         }
 
         /// <summary>
@@ -54,13 +102,35 @@ namespace App.ECS
         /// <typeparam name="T3">Any IComponent struct manipulable by a BaseSystem.</typeparam>
         /// <typeparam name="T4">Any IComponent struct manipulable by a BaseSystem.</typeparam>
         /// <returns>A container of all of the entities and associated components that make up the requested archetype.</returns>
-        public Archetype GetArchetype<T1, T2, T3, T4>()
+        public (int count, T1[], T2[], T3[], T4[]) GetArchetype<T1, T2, T3, T4>()
             where T1 : struct, IComponent<T1>
             where T2 : struct, IComponent<T2>
             where T3 : struct, IComponent<T3>
             where T4 : struct, IComponent<T4>
         {
-            return InternalGetArchetype(typeof(T1), typeof(T2), typeof(T3), typeof(T4));
+            Type t1 = typeof(T1), t2 = typeof(T2), t3 = typeof(T3), t4 = typeof(T4);
+
+            var entities = new HashSet<Entity>(components[t1].EntityIndices.Keys);
+            entities.IntersectWith(components[t2].EntityIndices.Keys);
+            entities.IntersectWith(components[t3].EntityIndices.Keys);
+            entities.IntersectWith(components[t4].EntityIndices.Keys);
+
+            T1[] t1Array = new T1[entities.Count];
+            T2[] t2Array = new T2[entities.Count];
+            T3[] t3Array = new T3[entities.Count];
+            T4[] t4Array = new T4[entities.Count];
+
+            var eIndices = components[t1].EntityIndices;
+            foreach (Entity entity in entities)
+            {
+                int e = eIndices[entity];
+                t1Array[e] = (T1)components[t1].Components[e];
+                t2Array[e] = (T2)components[t2].Components[e];
+                t3Array[e] = (T3)components[t3].Components[e];
+                t4Array[e] = (T4)components[t4].Components[e];
+            }
+
+            return (entities.Count, t1Array, t2Array, t3Array, t4Array);
         }
 
         /// <summary>
@@ -72,15 +142,40 @@ namespace App.ECS
         /// <typeparam name="T4">Any IComponent struct manipulable by a BaseSystem.</typeparam>
         /// <typeparam name="T5">Any IComponent struct manipulable by a BaseSystem.</typeparam>
         /// <returns>A container of all of the entities and associated components that make up the requested archetype.</returns>
-        public Archetype GetArchetype<T1, T2, T3, T4, T5>()
+        public (int count, T1[], T2[], T3[], T4[], T5[]) GetArchetype<T1, T2, T3, T4, T5>()
             where T1 : struct, IComponent<T1>
             where T2 : struct, IComponent<T2>
             where T3 : struct, IComponent<T3>
             where T4 : struct, IComponent<T4>
             where T5 : struct, IComponent<T5>
         {
-            return InternalGetArchetype(typeof(T1), typeof(T2),
-                                        typeof(T3), typeof(T4), typeof(T5));
+            Type t1 = typeof(T1), t2 = typeof(T2),
+                 t3 = typeof(T3), t4 = typeof(T4), t5 = typeof(T5);
+
+            var entities = new HashSet<Entity>(components[t1].EntityIndices.Keys);
+            entities.IntersectWith(components[t2].EntityIndices.Keys);
+            entities.IntersectWith(components[t3].EntityIndices.Keys);
+            entities.IntersectWith(components[t4].EntityIndices.Keys);
+            entities.IntersectWith(components[t5].EntityIndices.Keys);
+
+            T1[] t1Array = new T1[entities.Count];
+            T2[] t2Array = new T2[entities.Count];
+            T3[] t3Array = new T3[entities.Count];
+            T4[] t4Array = new T4[entities.Count];
+            T5[] t5Array = new T5[entities.Count];
+
+            var eIndices = components[t1].EntityIndices;
+            foreach (Entity entity in entities)
+            {
+                int e = eIndices[entity];
+                t1Array[e] = (T1)components[t1].Components[e];
+                t2Array[e] = (T2)components[t2].Components[e];
+                t3Array[e] = (T3)components[t3].Components[e];
+                t4Array[e] = (T4)components[t4].Components[e];
+                t5Array[e] = (T5)components[t5].Components[e];
+            }
+
+            return (entities.Count, t1Array, t2Array, t3Array, t4Array, t5Array);
         }
 
         /// <summary>
@@ -93,7 +188,7 @@ namespace App.ECS
         /// <typeparam name="T5">Any IComponent struct manipulable by a BaseSystem.</typeparam>
         /// <typeparam name="T6">Any IComponent struct manipulable by a BaseSystem.</typeparam>
         /// <returns>A container of all of the entities and associated components that make up the requested archetype.</returns>
-        public Archetype GetArchetype<T1, T2, T3, T4, T5, T6>()
+        public (int count, T1[], T2[], T3[], T4[], T5[], T6[]) GetArchetype<T1, T2, T3, T4, T5, T6>()
             where T1 : struct, IComponent<T1>
             where T2 : struct, IComponent<T2>
             where T3 : struct, IComponent<T3>
@@ -101,8 +196,36 @@ namespace App.ECS
             where T5 : struct, IComponent<T5>
             where T6 : struct, IComponent<T6>
         {
-            return InternalGetArchetype(typeof(T1), typeof(T2), typeof(T3),
-                                        typeof(T4), typeof(T5), typeof(T6));
+            Type t1 = typeof(T1), t2 = typeof(T2), t3 = typeof(T3),
+                 t4 = typeof(T4), t5 = typeof(T5), t6 = typeof(T6);
+
+            var entities = new HashSet<Entity>(components[t1].EntityIndices.Keys);
+            entities.IntersectWith(components[t2].EntityIndices.Keys);
+            entities.IntersectWith(components[t3].EntityIndices.Keys);
+            entities.IntersectWith(components[t4].EntityIndices.Keys);
+            entities.IntersectWith(components[t5].EntityIndices.Keys);
+            entities.IntersectWith(components[t6].EntityIndices.Keys);
+
+            T1[] t1Array = new T1[entities.Count];
+            T2[] t2Array = new T2[entities.Count];
+            T3[] t3Array = new T3[entities.Count];
+            T4[] t4Array = new T4[entities.Count];
+            T5[] t5Array = new T5[entities.Count];
+            T6[] t6Array = new T6[entities.Count];
+
+            var eIndices = components[t1].EntityIndices;
+            foreach (Entity entity in entities)
+            {
+                int e = eIndices[entity];
+                t1Array[e] = (T1)components[t1].Components[e];
+                t2Array[e] = (T2)components[t2].Components[e];
+                t3Array[e] = (T3)components[t3].Components[e];
+                t4Array[e] = (T4)components[t4].Components[e];
+                t5Array[e] = (T5)components[t5].Components[e];
+                t6Array[e] = (T6)components[t6].Components[e];
+            }
+
+            return (entities.Count, t1Array, t2Array, t3Array, t4Array, t5Array, t6Array);
         }
 
         /// <summary>
@@ -116,7 +239,7 @@ namespace App.ECS
         /// <typeparam name="T6">Any IComponent struct manipulable by a BaseSystem.</typeparam>
         /// <typeparam name="T7">Any IComponent struct manipulable by a BaseSystem.</typeparam>
         /// <returns>A container of all of the entities and associated components that make up the requested archetype.</returns>
-        public Archetype GetArchetype<T1, T2, T3, T4, T5, T6, T7>()
+        public (int count, T1[], T2[], T3[], T4[], T5[], T6[], T7[]) GetArchetype<T1, T2, T3, T4, T5, T6, T7>()
             where T1 : struct, IComponent<T1>
             where T2 : struct, IComponent<T2>
             where T3 : struct, IComponent<T3>
@@ -125,8 +248,39 @@ namespace App.ECS
             where T6 : struct, IComponent<T6>
             where T7 : struct, IComponent<T7>
         {
-            return InternalGetArchetype(typeof(T1), typeof(T2), typeof(T3),
-                                        typeof(T4), typeof(T5), typeof(T6), typeof(T7));
+            Type t1 = typeof(T1), t2 = typeof(T2), t3 = typeof(T3),
+                 t4 = typeof(T4), t5 = typeof(T5), t6 = typeof(T6), t7 = typeof(T7);
+
+            var entities = new HashSet<Entity>(components[t1].EntityIndices.Keys);
+            entities.IntersectWith(components[t2].EntityIndices.Keys);
+            entities.IntersectWith(components[t3].EntityIndices.Keys);
+            entities.IntersectWith(components[t4].EntityIndices.Keys);
+            entities.IntersectWith(components[t5].EntityIndices.Keys);
+            entities.IntersectWith(components[t6].EntityIndices.Keys);
+            entities.IntersectWith(components[t7].EntityIndices.Keys);
+
+            T1[] t1Array = new T1[entities.Count];
+            T2[] t2Array = new T2[entities.Count];
+            T3[] t3Array = new T3[entities.Count];
+            T4[] t4Array = new T4[entities.Count];
+            T5[] t5Array = new T5[entities.Count];
+            T6[] t6Array = new T6[entities.Count];
+            T7[] t7Array = new T7[entities.Count];
+
+            var eIndices = components[t1].EntityIndices;
+            foreach (Entity entity in entities)
+            {
+                int e = eIndices[entity];
+                t1Array[e] = (T1)components[t1].Components[e];
+                t2Array[e] = (T2)components[t2].Components[e];
+                t3Array[e] = (T3)components[t3].Components[e];
+                t4Array[e] = (T4)components[t4].Components[e];
+                t5Array[e] = (T5)components[t5].Components[e];
+                t6Array[e] = (T6)components[t6].Components[e];
+                t7Array[e] = (T7)components[t7].Components[e];
+            }
+
+            return (entities.Count, t1Array, t2Array, t3Array, t4Array, t5Array, t6Array, t7Array);
         }
 
         /// <summary>
@@ -141,7 +295,7 @@ namespace App.ECS
         /// <typeparam name="T7">Any IComponent struct manipulable by a BaseSystem.</typeparam>
         /// <typeparam name="T8">Any IComponent struct manipulable by a BaseSystem.</typeparam>
         /// <returns>A container of all of the entities and associated components that make up the requested archetype.</returns>
-        public Archetype GetArchetype<T1, T2, T3, T4, T5, T6, T7, T8>()
+        public (int count, T1[], T2[], T3[], T4[], T5[], T6[], T7[], T8[]) GetArchetype<T1, T2, T3, T4, T5, T6, T7, T8>()
             where T1 : struct, IComponent<T1>
             where T2 : struct, IComponent<T2>
             where T3 : struct, IComponent<T3>
@@ -151,54 +305,46 @@ namespace App.ECS
             where T7 : struct, IComponent<T7>
             where T8 : struct, IComponent<T8>
         {
-            return InternalGetArchetype(typeof(T1), typeof(T2), typeof(T3), typeof(T4),
-                                        typeof(T5), typeof(T6), typeof(T7), typeof(T8));
+            Type t1 = typeof(T1), t2 = typeof(T2), t3 = typeof(T3), t4 = typeof(T4),
+                 t5 = typeof(T5), t6 = typeof(T6), t7 = typeof(T7), t8 = typeof(T8);
+
+            var entities = new HashSet<Entity>(components[t1].EntityIndices.Keys);
+            entities.IntersectWith(components[t2].EntityIndices.Keys);
+            entities.IntersectWith(components[t3].EntityIndices.Keys);
+            entities.IntersectWith(components[t4].EntityIndices.Keys);
+            entities.IntersectWith(components[t5].EntityIndices.Keys);
+            entities.IntersectWith(components[t6].EntityIndices.Keys);
+            entities.IntersectWith(components[t7].EntityIndices.Keys);
+            entities.IntersectWith(components[t8].EntityIndices.Keys);
+
+            T1[] t1Array = new T1[entities.Count];
+            T2[] t2Array = new T2[entities.Count];
+            T3[] t3Array = new T3[entities.Count];
+            T4[] t4Array = new T4[entities.Count];
+            T5[] t5Array = new T5[entities.Count];
+            T6[] t6Array = new T6[entities.Count];
+            T7[] t7Array = new T7[entities.Count];
+            T8[] t8Array = new T8[entities.Count];
+
+            var eIndices = components[t1].EntityIndices;
+            foreach (Entity entity in entities)
+            {
+                int e = eIndices[entity];
+                t1Array[e] = (T1)components[t1].Components[e];
+                t2Array[e] = (T2)components[t2].Components[e];
+                t3Array[e] = (T3)components[t3].Components[e];
+                t4Array[e] = (T4)components[t4].Components[e];
+                t5Array[e] = (T5)components[t5].Components[e];
+                t6Array[e] = (T6)components[t6].Components[e];
+                t7Array[e] = (T7)components[t7].Components[e];
+                t8Array[e] = (T8)components[t8].Components[e];
+            }
+
+            return (entities.Count, t1Array, t2Array, t3Array, t4Array, t5Array, t6Array, t7Array, t8Array);
         }
 
         // If more types end up being needed, add them
 
         #endregion
-
-        /// <summary>
-        /// How component manager actually grabs and returns our entities that make up an archetype.
-        /// </summary>
-        /// <param name="groupedTypes">An array of types that make up an entity archetype.</param>
-        /// <returns>A container of all of the entities and associated components that make up the requested archetype.</returns>
-        private Archetype InternalGetArchetype(params Type[] groupedTypes)
-        {
-            var entities = new HashSet<Entity>();
-            var components = new Dictionary<Type, List<IComponent>>();
-
-            // Get entities that make up this archetype
-            bool firstSet = false;
-            for (int i = 0; i < groupedTypes.Length; i++)
-            {
-                if (this.components.ContainsKey(groupedTypes[i]))
-                {
-                    if (!firstSet)
-                    {
-                        firstSet = true;
-                        entities.UnionWith(this.components[groupedTypes[i]].EntityIndices.Keys);
-                    }
-                    else
-                        entities.IntersectWith(this.components[groupedTypes[i]].EntityIndices.Keys);
-                }
-            }
-
-            // Now get the components
-            for (int i = 0; i < groupedTypes.Length; i++)
-            {
-                var eIndices = this.components[groupedTypes[i]].EntityIndices;
-                var cList = this.components[groupedTypes[i]].Components;
-
-                components.Add(groupedTypes[i], new List<IComponent>());
-                foreach (Entity entity in entities)
-                {
-                    components[groupedTypes[i]].Add(cList[eIndices[entity]]);
-                }
-            }
-
-            return new Archetype(entities, components);
-        }
     }
 }

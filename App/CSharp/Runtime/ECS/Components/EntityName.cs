@@ -13,11 +13,11 @@
 
         #region Overrides and Operators
 
-        public override bool Equals(object obj) => obj is EntityName c && Equals(c);
+        public override readonly bool Equals(object obj) => obj is EntityName c && Equals(c);
 
-        public bool Equals(EntityName other) => ReferenceEquals(this, other) || Name == other.Name;
+        public readonly bool Equals(EntityName other) => ReferenceEquals(this, other) || Name == other.Name;
 
-        public int CompareTo(EntityName other)
+        public readonly int CompareTo(EntityName other)
         {
             if (string.IsNullOrEmpty(Name))
             {
@@ -33,9 +33,9 @@
             return Name.CompareTo(other.Name);
         }
 
-        public override int GetHashCode() => Name.GetHashCode();
+        public override readonly int GetHashCode() => Name.GetHashCode();
 
-        public override string ToString() => $"Entity Name: {Name}";
+        public override readonly string ToString() => $"Entity Name: {Name}";
 
         public static bool operator ==(EntityName c1, EntityName c2) => c1.Equals(c2);
 

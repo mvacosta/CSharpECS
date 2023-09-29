@@ -7,7 +7,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>App</RootNamespace>
     <AssemblyName>Tutorial</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <StartupObject>Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
@@ -19,6 +19,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <IntermediateOutputPath>obj\Debug</IntermediateOutputPath>
+    <LangVersion>latestmajor</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <Optimize>true</Optimize>
@@ -26,6 +27,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <IntermediateOutputPath>obj\Release</IntermediateOutputPath>
+    <LangVersion>latestmajor</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,6 +39,7 @@
     <WarningLevel>4</WarningLevel>
     <IntermediateOutputPath>obj\Debug</IntermediateOutputPath>
     <AssemblyName>App</AssemblyName>
+    <LangVersion>latestmajor</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -47,6 +50,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <IntermediateOutputPath>obj\Debug</IntermediateOutputPath>
+    <LangVersion>latestmajor</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -54,6 +58,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <IntermediateOutputPath>obj\Release</IntermediateOutputPath>
+    <LangVersion>latestmajor</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <Optimize>true</Optimize>
@@ -61,6 +66,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <IntermediateOutputPath>obj\Release</IntermediateOutputPath>
+    <LangVersion>latestmajor</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="CSharp\" />
@@ -82,13 +88,11 @@
     <Compile Include="CSharp\Runtime\IReusable.cs" />
     <Compile Include="CSharp\Runtime\ECS\Core\ECSWorld.cs" />
     <Compile Include="CSharp\Runtime\ECS\Core\IComponent.cs" />
-    <Compile Include="CSharp\Runtime\ECS\Core\ExecuteAttributes.cs" />
     <Compile Include="CSharp\Runtime\ECS\Core\AbstractSystem.cs" />
     <Compile Include="CSharp\Runtime\ECS\Core\ECSManager.cs" />
     <Compile Include="CSharp\Runtime\ECS\Core\Entity.cs" />
     <Compile Include="CSharp\Runtime\ECS\Core\ComponentManager\ComponentContainer.cs" />
     <Compile Include="CSharp\Runtime\ECS\Core\ComponentManager\GetArchetypes.cs" />
-    <Compile Include="CSharp\Runtime\ECS\Core\ComponentManager\Archetype.cs" />
     <Compile Include="CSharp\Runtime\ECS\Core\ComponentManager\ComponentManager.cs" />
     <Compile Include="CSharp\Runtime\ECS\Components\EntityName.cs" />
     <Compile Include="CSharp\Runtime\ECS\Components\TagComponents.cs" />
@@ -100,9 +104,24 @@
     <None Include="Content\TestTexture.png" />
     <None Include="Content\TestSFX.wav" />
     <None Include="CSharp\Runtime\ECS\Components\_ComponentTemplate_" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Buffers">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib" />
+    <Reference Include="System.Numerics.Vectors">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory">
+      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

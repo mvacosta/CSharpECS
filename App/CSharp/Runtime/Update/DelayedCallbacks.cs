@@ -109,7 +109,7 @@ namespace App.Update
                 if (helper.IsRetired) return helper;
             }
 
-            UpdateHelper newHelper = new UpdateHelper(helpers.Count, this);
+            var newHelper = new UpdateHelper(helpers.Count, this);
             helpers.Add(newHelper);
 
             return newHelper;

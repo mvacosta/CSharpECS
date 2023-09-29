@@ -7,9 +7,9 @@ namespace App.ECS
 {
     public sealed class ECSWorld : AbstractDisposable, IReusable
     {
-        private HashSet<Entity> entities = new HashSet<Entity>();
-        private Dictionary<Type, AbstractSystem> systems = new Dictionary<Type, AbstractSystem>();
-        private ComponentManager components = new ComponentManager();
+        private HashSet<Entity> entities = new();
+        private Dictionary<Type, AbstractSystem> systems = new();
+        private ComponentManager components = new();
         private ECSManager ecsManager = App.ECSManager;
 
         public string WorldName { get; set; } = "New World";
@@ -22,18 +22,16 @@ namespace App.ECS
 
             float w = App.GraphicsDeviceManager.PreferredBackBufferWidth;
             float h = App.GraphicsDeviceManager.PreferredBackBufferHeight;
-            Random test = new Random();
-            foreach (Entity entity in entities)
+            var test = new Random();
+            foreach (var entity in entities)
             {
                 Components.AttachComponent(entity, new Transform(new Vector3((float)test.NextDouble() * w,
                                                                              (float)test.NextDouble() * h, 0.0f),
-                                                                 Quaternion.Identity,
                                                                  new Vector3(1.0f, 1.0f, (float)test.NextDouble() * 0.8f + 0.2f)));
 
-                Components.AttachComponent(entity, new Sprite(tex,
-                                                              new Color((float)test.NextDouble(),
-                                                                        (float)test.NextDouble(),
-                                                                        (float)test.NextDouble(), 1.0f)));
+                Components.AttachComponent(entity, new Sprite(tex, new Color((float)test.NextDouble(),
+                                                                             (float)test.NextDouble(),
+                                                                             (float)test.NextDouble(), 1.0f)));
             }
         }
 
@@ -41,8 +39,10 @@ namespace App.ECS
         {
             ecsManager.ReturnEntities(entities);
 
-            foreach (AbstractSystem system in systems.Values)
+            foreach (var system in systems.Values)
+            {
                 system.Dispose();
+            }
 
             systems.Clear();
             systems = null;
@@ -55,7 +55,9 @@ namespace App.ECS
         {
             // Entities are managed by ECSManager so return them first
             if(ecsManager != null && !IsDisposed)
+            {
                 ecsManager.ReturnEntities(entities);
+            }
 
             ecsManager = null;
 
@@ -65,8 +67,10 @@ namespace App.ECS
 
         public void Retire()
         {
-            foreach (AbstractSystem system in systems.Values)
+            foreach (var system in systems.Values)
+            {
                 system.Retire();
+            }
 
             components.Retire();
 

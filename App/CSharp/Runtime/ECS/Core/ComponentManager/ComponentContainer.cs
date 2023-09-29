@@ -10,10 +10,10 @@ namespace App.ECS
         /// </summary>
         internal sealed class ComponentContainer : AbstractDisposable, IReusable
         {
-            private List<int> openIndices = new List<int>();
+            private List<int> openIndices = new();
 
-            public List<IComponent> Components = new List<IComponent>();
-            public Dictionary<Entity, int> EntityIndices = new Dictionary<Entity, int>();
+            public List<IComponent> Components = new();
+            public Dictionary<Entity, int> EntityIndices = new();
 
             public bool IsRetired { get; private set; } = false;
 
@@ -47,7 +47,7 @@ namespace App.ECS
 
             public void SetComponents<T>(Dictionary<Entity, T> pairs) where T : struct, IComponent<T>
             {
-                foreach (Entity entity in pairs.Keys)
+                foreach (var entity in pairs.Keys)
                 {
                     Components[EntityIndices[entity]] = pairs[entity];
                 }
@@ -73,7 +73,7 @@ namespace App.ECS
 
             public void AttachRangeComponents<T>(HashSet<Entity> entities, T value) where T : struct, IComponent<T>
             {
-                foreach (Entity entity in entities)
+                foreach (var entity in entities)
                 {
                     if (!EntityIndices.ContainsKey(entity))
                     {
@@ -92,7 +92,7 @@ namespace App.ECS
 
             public void AttachRangeComponents<T>(Dictionary<Entity, T> pairs) where T : struct, IComponent<T>
             {
-                foreach (Entity entity in pairs.Keys)
+                foreach (var entity in pairs.Keys)
                 {
                     if (!EntityIndices.ContainsKey(entity))
                     {
@@ -117,7 +117,7 @@ namespace App.ECS
 
             public void DetachRangeComponents(HashSet<Entity> entities)
             {
-                foreach (Entity entity in entities)
+                foreach (var entity in entities)
                 {
                     DetachComponent(entity);
                 }
