@@ -16,6 +16,16 @@ namespace App.Update
         }
 
         /// <summary>
+        /// Invoke callback on the end of the frame.
+        /// </summary>
+        /// <param name="callback">Callback to invoke.</param>
+        /// <returns>ID for this delayed callback. Use it for <b>CancelDelayedCall</b> if needed.</returns>
+        public int CallEndOfFrame(Action callback)
+        {
+            return GetNextHelper().CallEndOfFrame(callback);
+        }
+
+        /// <summary>
         /// Invoke callback on the next frame.
         /// </summary>
         /// <param name="callback">Callback to invoke.</param>
@@ -109,7 +119,7 @@ namespace App.Update
                 if (helper.IsRetired) return helper;
             }
 
-            var newHelper = new UpdateHelper(helpers.Count, this);
+            var newHelper = new UpdateHelper(helpers.Count);
             helpers.Add(newHelper);
 
             return newHelper;

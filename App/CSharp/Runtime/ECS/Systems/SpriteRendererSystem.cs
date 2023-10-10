@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace App.ECS
@@ -11,41 +10,50 @@ namespace App.ECS
     /// </summary>
     public class SpriteRendererSystem : AbstractSystem
     {
-        private ECSWorld world = null;
-
-        public override void Initialize(ECSWorld world)
+        public override void Enable(ECSWorld world)
         {
-            this.world = world;
-            App.UpdateManager.OnDraw += DoDrawTest;
+            App.UpdateManager.OnFixedUpdate += OnFixedUpdate;
+            App.UpdateManager.OnDraw += OnDraw;
+
+            base.Enable(world);
         }
 
-        public override void Retire()
+        public override void Disable()
         {
-            App.UpdateManager.OnDraw -= DoDrawTest;
+            App.UpdateManager.OnFixedUpdate -= OnFixedUpdate;
+            App.UpdateManager.OnDraw -= OnDraw;
+
+            base.Disable();
         }
 
-        private void DoDrawTest(double dt)
+        public void OnFixedUpdate(double dt)
         {
-            var data = world.Components.GetArchetype<Transform, Sprite>();
-            DrawSprites(data.count, data.Item2, data.Item3);
+            var (Count, C1) = World.GetArchetype<Transform>();
+
+            Transform trans = C1[Count - 1];
+            float x = trans.Position.X + (100.0f * (float)dt);
+            x = x > 1280.0f ? 0.0f : x;
+            trans.Position = new Vector3(x, trans.Position.Y, trans.Position.Z);
         }
 
-        public void DrawSprites(int count, ReadOnlySpan<Transform> transforms, ReadOnlySpan<Sprite> sprites)
+        public void OnDraw(double dt)
         {
             SpriteBatch spriteBatch = App.SpriteBatch;
+            var (Count, C1, C2) = World.GetArchetype<Transform, Sprite>();
+            
             spriteBatch.Begin();
 
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < Count; i++)
             {
-                var transform = transforms[i];
-                var sprite = sprites[i];
+                var transform = C1[i];
+                var sprite = C2[i];
 
                 spriteBatch.Draw(sprite.Texture,
                                  new Vector2(transform.Position.X,
                                              transform.Position.Y),
                                  null,
                                  sprite.Color,
-                                 0.0f,
+                                 transform.Rotation.Z,
                                  sprite.Origin,
                                  transform.Scale.Z,
                                  sprite.Flip,

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using App.Update;
+﻿using System.Collections.Generic;
 
 namespace App.ECS
 {
@@ -77,7 +75,9 @@ namespace App.ECS
                 worldEntities.Add(entity);
 
                 if (++count >= amount)
+                {
                     break;
+                }
             }
 
             entities.ExceptWith(worldEntities);

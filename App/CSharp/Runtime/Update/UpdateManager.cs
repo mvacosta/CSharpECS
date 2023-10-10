@@ -1,6 +1,5 @@
 //#define ALLOW_UPDATE_RESET
 
-using System;
 using System.Collections.Generic;
 
 namespace App.Update
@@ -11,37 +10,31 @@ namespace App.Update
     {
         private const int POOLED_HELPERS = 10;
         private const double FIXED_UPDATE_STEP = 1.0 / App.FIXED_FRAMERATE; // Simulate in 60 FPS
-        private const double FIXED_DRAW_STEP = 1.0 / App.FIXED_FRAMERATE; // Locked FPS as a const for now; TODO: Have user set draw FPS
-        private const double RESET_THRESHOLD = 1.0 / 4.0; // XNA caps at 0.5 dt but our threshold is lower
+        private const double RESET_THRESHOLD = FIXED_UPDATE_STEP * 4.0;
 
         private double updateStep = 0.0;
-        private double drawStep = 0.0;
-        private HashSet<UpdateHelper> helpers = new();
+        private HashSet<UpdateHelper> helpers = new(POOLED_HELPERS);
+        private DeltaHandler onEndOfFrame = null;
 
         /// <summary>
-        /// Use for user input, networked input & output, or timing.
+        /// Use for user input, networked IO, or timing.
         /// </summary>
-        public event Action<double> OnUpdate = null;
+        public DeltaHandler OnUpdate = null;
 
         /// <summary>
         /// Use for game logic and physics updates.
         /// </summary>
-        public event Action<double> OnFixedUpdate = null;
+        public DeltaHandler OnFixedUpdate = null;
 
         /// <summary>
         /// A second fixed update that occurs after; useful for ordering execution.
         /// </summary>
-        public event Action<double> OnLateUpdate = null;
+        public DeltaHandler OnLateUpdate = null;
 
         /// <summary>
         /// Use only for draw code. Interpolation is passed for smoother on-screen movement.
         /// </summary>
-        public event Action<double> OnDraw = null;
-
-        /// <summary>
-        /// Draw at a fixed time step. False will draw on every frame possible.
-        /// </summary>
-        public bool UseFixedDraw { get; set; } = true;
+        public DeltaHandler OnDraw = null;
 
         /// <summary>
         /// Total amount of frames since application has started.
@@ -65,9 +58,10 @@ namespace App.Update
 
         private UpdateManager()
         {
+            UpdateHelper.manager = this;
             for (int i = 0; i < POOLED_HELPERS; i++)
             {
-                helpers.Add(new UpdateHelper(i, this));
+                helpers.Add(new UpdateHelper(i));
             }
         }
 
@@ -80,6 +74,9 @@ namespace App.Update
 
             helpers.Clear();
             helpers = null;
+
+            UpdateHelper.manager = null;
+            onEndOfFrame = null;
 
             OnUpdate = null;
             OnFixedUpdate = null;
@@ -98,13 +95,10 @@ namespace App.Update
             // If time is starting to get real delayed, reset to try to smooth things out
             if (updateStep >= RESET_THRESHOLD)
             {
-                updateStep = 0.0;
-                drawStep = 0.0;
-            
+                updateStep = 0;
                 return;
             }
 #endif
-
             Update(dt);
 
             while (updateStep >= FIXED_UPDATE_STEP)
@@ -118,23 +112,9 @@ namespace App.Update
 
         private void HandleDraw(double dt)
         {
-            double interpolation = updateStep / dt;
+            Draw(updateStep);
 
-            if (UseFixedDraw)
-            {
-                drawStep += dt;
-
-                if (drawStep >= FIXED_DRAW_STEP)
-                {
-                    drawStep -= FIXED_DRAW_STEP;
-
-                    Draw(interpolation);
-                }
-            }
-            else
-            {
-                Draw(interpolation);
-            }
+            onEndOfFrame?.Invoke(dt);
         }
 
         private void Update(double dt)

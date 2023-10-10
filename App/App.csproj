@@ -91,14 +91,13 @@
     <Compile Include="CSharp\Runtime\ECS\Core\AbstractSystem.cs" />
     <Compile Include="CSharp\Runtime\ECS\Core\ECSManager.cs" />
     <Compile Include="CSharp\Runtime\ECS\Core\Entity.cs" />
-    <Compile Include="CSharp\Runtime\ECS\Core\ComponentManager\ComponentContainer.cs" />
-    <Compile Include="CSharp\Runtime\ECS\Core\ComponentManager\GetArchetypes.cs" />
-    <Compile Include="CSharp\Runtime\ECS\Core\ComponentManager\ComponentManager.cs" />
     <Compile Include="CSharp\Runtime\ECS\Components\EntityName.cs" />
     <Compile Include="CSharp\Runtime\ECS\Components\TagComponents.cs" />
     <Compile Include="CSharp\Runtime\ECS\Components\Sprite.cs" />
     <Compile Include="CSharp\Runtime\ECS\Components\Transform.cs" />
     <Compile Include="CSharp\Runtime\ECS\Systems\SpriteRendererSystem.cs" />
+    <Compile Include="CSharp\Runtime\ECS\Core\ComponentContainer.cs" />
+    <Compile Include="CSharp\Runtime\ECS\Core\GetArchetypes.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\TestTexture.png" />
@@ -117,7 +116,7 @@
     </Reference>
     <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.CompilerServices.Unsafe">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Memory">
       <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>

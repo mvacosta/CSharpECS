@@ -23,7 +23,7 @@ namespace App
     {
         //TODO: Move these to an exportable/importable engine profile thingy
         public const int FIXED_FRAMERATE = 60;
-        public static Color CLEAR_COLOR = new Color(0.0f, 0.5f, 1.0f);
+        public static Color CLEAR_COLOR = new (0.0f, 0.5f, 1.0f);
 
         #region Singletons
 
@@ -89,9 +89,11 @@ namespace App
                 handleUpdate = null;
                 handleDraw = null;
 
-                App.Content = null;
-                App.GraphicsDevice = null;
-                GraphicsDeviceManager = null;
+                ECSManager.Dispose();
+                ECSManager = null;
+
+                GameManager.Dispose();
+                GameManager = null;
 
                 SpriteBatch.Dispose();
                 SpriteBatch = null;
@@ -99,11 +101,9 @@ namespace App
                 UpdateManager.Dispose();
                 UpdateManager = null;
 
-                GameManager.Dispose();
-                GameManager = null;
-
-                ECSManager.Dispose();
-                ECSManager = null;
+                App.Content = null;
+                App.GraphicsDevice = null;
+                GraphicsDeviceManager = null;
 
                 base.Dispose(disposing);
             }

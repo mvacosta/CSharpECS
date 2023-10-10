@@ -16,7 +16,7 @@ namespace App
         /// </para>
         /// Note: NEVER set this manually, <see cref="Dispose()"/> will handle it.
         /// </summary>
-        public bool IsDisposed { get; private set; }
+        public bool IsDisposed { get; private set; } = false;
 
         /// <summary><para>
         /// Releases mangaged resources. Most classes will override this.
@@ -32,13 +32,18 @@ namespace App
         /// </summary>
         protected virtual void DisposeUnmanagedResources() { }
 
-        /// <summary><para>
-        /// Calls DisposeManagedResources() and DisposeUnmanagedResources() when needed.
-        /// </para>
-        /// Note: Do not call this manually, call <see cref="Dispose()"/> instead.
+        /// <summary>
+        /// Disposes this object manually by freeing up all of our managed and unmanaged resources.
         /// </summary>
-        /// <param name="manualDispose">If true, it was called via Dispose() and will release managed resources. If false, the finalizer called this.</param>
-        protected void Dispose(bool manualDispose)
+        public void Dispose()
+        {
+            if (IsDisposed) return;
+
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool manualDispose)
         {
             if (!IsDisposed)
             {
@@ -51,17 +56,6 @@ namespace App
             }
 
             IsDisposed = true;
-        }
-
-        /// <summary>
-        /// Disposes this object manually by freeing up all of our managed and unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            if (IsDisposed) return;
-
-            Dispose(true);
-            GC.SuppressFinalize(this);
         }
 
         ~AbstractDisposable()

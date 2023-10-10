@@ -13,5 +13,5 @@ namespace App.ECS
     /// <summary>
     /// For components used as part of the Entity-Component-System
     /// </summary>
-    public interface IComponent<T> : IComponent, IEquatable<T>, IComparable<T> where T : struct { }
+    public interface IComponent<T> : IComponent, IEquatable<T>, IComparable<T> where T : IComponent { }
 }

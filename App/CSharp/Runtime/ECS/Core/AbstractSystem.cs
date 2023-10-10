@@ -1,16 +1,22 @@
-﻿using System;
-
-namespace App.ECS
+﻿namespace App.ECS
 {
     /// <summary>
     /// AbstractSystem will iterate through our components to compute whatever tasks are required.
     /// </summary>
-    public abstract class AbstractSystem : AbstractDisposable, IReusable
+    public abstract class AbstractSystem
     {
-        public bool IsRetired { get; private set; } = true;
+        public bool IsActive => World != null;
 
-        public abstract void Initialize(ECSWorld world);
+        protected ECSWorld World { get; private set; } = null;
 
-        public virtual void Retire() { }
+        public virtual void Enable(ECSWorld world)
+        {
+            World = world;
+        }
+
+        public virtual void Disable()
+        {
+            World = null;
+        }
     }
 }

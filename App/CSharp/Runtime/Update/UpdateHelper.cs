@@ -6,6 +6,8 @@ namespace App.Update
     {
         internal sealed class UpdateHelper : AbstractDisposable, IReusable
         {
+            internal static UpdateManager manager = null;
+
             private int repeat = 0;
             private ulong framesAmount = 0;
             private ulong callOnFrame = 0;
@@ -13,24 +15,20 @@ namespace App.Update
             private double callOnSeconds = 0.0;
             private Action delayedCallback = null;
             private Func<bool> condition = null;
-            private UpdateManager updateManager = null;
 
             public readonly int ID;
             public bool IsRetired { get; private set; } = true;
 
-            public UpdateHelper(int id, UpdateManager updateManager)
+            internal UpdateHelper(int id)
             {
                 ID = id;
-                this.updateManager = updateManager;
             }
 
             public override int GetHashCode() => ID;
 
             protected override void DisposeManagedResources()
             {
-                updateManager.CancelDelayedCall(ID);
-
-                updateManager = null;
+                manager.CancelDelayedCall(ID);
             }
 
             public void Retire()
@@ -44,32 +42,34 @@ namespace App.Update
                 delayedCallback = null;
                 condition = null;
 
-                updateManager.OnUpdate -= OnFramesUpdate;
-                updateManager.OnUpdate -= OnSecondsUpdate;
-                updateManager.OnUpdate -= OnAfterConditionUpdate;
-                updateManager.OnUpdate -= OnWhileConditionUpdate;
+                manager.onEndOfFrame -= OnFramesUpdate;
+                manager.onEndOfFrame -= OnSecondsUpdate;
+                manager.onEndOfFrame -= OnAfterConditionUpdate;
+                manager.onEndOfFrame -= OnWhileConditionUpdate;
 
                 IsRetired = true;
             }
 
             #region Frame-based Callbacks
 
-            public int CallLaterFrame(Action delayedCallback, ulong frame)
+            internal int CallLaterFrame(Action delayedCallback, ulong frame)
             {
                 framesAmount = frame + 1;
-                callOnFrame = updateManager.TotalFrames + framesAmount;
+                callOnFrame = manager.TotalFrames + framesAmount;
                 this.delayedCallback = delayedCallback;
 
-                updateManager.OnUpdate += OnFramesUpdate;
+                manager.onEndOfFrame += OnFramesUpdate;
 
                 IsRetired = false;
 
                 return ID;
             }
 
-            public int CallNextFrame(Action delayedCallback) => CallLaterFrame(delayedCallback, 1);
+            internal int CallEndOfFrame(Action delayedCallback) => CallLaterFrame(delayedCallback, 0);
 
-            public int CallRepeatFrame(Action delayedCallback, ulong frame, int repeat)
+            internal int CallNextFrame(Action delayedCallback) => CallLaterFrame(delayedCallback, 1);
+
+            internal int CallRepeatFrame(Action delayedCallback, ulong frame, int repeat)
             {
                 this.repeat = repeat;
 
@@ -78,7 +78,7 @@ namespace App.Update
 
             private void OnFramesUpdate(double _)
             {
-                if (updateManager.TotalFrames >= callOnFrame)
+                if (manager.TotalFrames >= callOnFrame)
                 {
                     delayedCallback();
                     callOnFrame += framesAmount;
@@ -96,20 +96,20 @@ namespace App.Update
 
             #region Seconds-based Callbacks
 
-            public int CallLaterSeconds(Action delayedCallback, double seconds)
+            internal int CallLaterSeconds(Action delayedCallback, double seconds)
             {
                 secondsAmount = seconds;
-                callOnSeconds = updateManager.TotalSeconds + secondsAmount;
+                callOnSeconds = manager.TotalSeconds + secondsAmount;
                 this.delayedCallback = delayedCallback;
 
-                updateManager.OnUpdate += OnSecondsUpdate;
+                manager.onEndOfFrame += OnSecondsUpdate;
 
                 IsRetired = false;
 
                 return ID;
             }
 
-            public int CallRepeatSeconds(Action delayedCallback, double seconds, int repeat)
+            internal int CallRepeatSeconds(Action delayedCallback, double seconds, int repeat)
             {
                 this.repeat = repeat;
 
@@ -118,7 +118,7 @@ namespace App.Update
 
             private void OnSecondsUpdate(double _)
             {
-                if (updateManager.TotalSeconds >= callOnSeconds)
+                if (manager.TotalSeconds >= callOnSeconds)
                 {
                     delayedCallback();
                     callOnSeconds += secondsAmount;
@@ -136,12 +136,12 @@ namespace App.Update
 
             #region Conditional Callbacks
 
-            public int CallAfterCondition(Action delayedCallback, Func<bool> condition)
+            internal int CallAfterCondition(Action delayedCallback, Func<bool> condition)
             {
                 this.delayedCallback = delayedCallback;
                 this.condition = condition;
 
-                updateManager.OnUpdate += OnAfterConditionUpdate;
+                manager.onEndOfFrame += OnAfterConditionUpdate;
 
                 IsRetired = false;
 
@@ -157,12 +157,12 @@ namespace App.Update
                 }
             }
 
-            public int CallWhileCondition(Action delayedCallback, Func<bool> condition)
+            internal int CallWhileCondition(Action delayedCallback, Func<bool> condition)
             {
                 this.delayedCallback = delayedCallback;
                 this.condition = condition;
 
-                updateManager.OnUpdate += OnWhileConditionUpdate;
+                manager.onEndOfFrame += OnWhileConditionUpdate;
 
                 IsRetired = false;
 
