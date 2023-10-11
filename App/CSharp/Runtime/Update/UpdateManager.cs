@@ -1,5 +1,3 @@
-//#define ALLOW_UPDATE_RESET
-
 using System.Collections.Generic;
 
 namespace App.Update
@@ -10,9 +8,11 @@ namespace App.Update
     {
         private const int POOLED_HELPERS = 10;
         private const double FIXED_UPDATE_STEP = 1.0 / App.FIXED_FRAMERATE; // Simulate in 60 FPS
+        private const double FIXED_DRAW_STEP = 1.0 / App.FIXED_FRAMERATE; // Draw in 60 FPS; TODO: This should be able to be set by the user
         private const double RESET_THRESHOLD = FIXED_UPDATE_STEP * 4.0;
 
-        private double updateStep = 0.0;
+        private double updateStep = -FIXED_UPDATE_STEP;
+        private double drawStep = -FIXED_DRAW_STEP;
         private HashSet<UpdateHelper> helpers = new(POOLED_HELPERS);
         private DeltaHandler onEndOfFrame = null;
 
@@ -45,6 +45,11 @@ namespace App.Update
         /// Total amount of seconds since application has started.
         /// </summary>
         public double TotalSeconds { get; private set; } = 0.0;
+
+        /// <summary>
+        /// Draw at a fixed time step. False will draw on every frame possible.
+        /// </summary>
+        public bool UseFixedDraw { get; set; } = true;
 
         public static UpdateManager CreateUpdateManager(out DeltaHandler update, out DeltaHandler draw)
         {
@@ -91,14 +96,14 @@ namespace App.Update
 
             updateStep += dt;
 
-#if ALLOW_UPDATE_RESET
             // If time is starting to get real delayed, reset to try to smooth things out
             if (updateStep >= RESET_THRESHOLD)
             {
-                updateStep = 0;
+                updateStep = -FIXED_UPDATE_STEP;
+                drawStep = -FIXED_DRAW_STEP;
                 return;
             }
-#endif
+
             Update(dt);
 
             while (updateStep >= FIXED_UPDATE_STEP)
@@ -108,13 +113,31 @@ namespace App.Update
                 FixedUpdate(FIXED_UPDATE_STEP);
                 LateUpdate(FIXED_UPDATE_STEP);
             }
-        }
 
-        private void HandleDraw(double dt)
-        {
-            Draw(updateStep);
+            // Determine Draw
+            if (UseFixedDraw)
+            {
+                drawStep += dt;
+                while (drawStep >= FIXED_DRAW_STEP)
+                {
+                    drawStep -= FIXED_DRAW_STEP;
+                    if (drawStep < FIXED_DRAW_STEP)
+                    {
+                        App.DrawNextFrame();
+                    }
+                }
+            }
+            else
+            {
+                App.DrawNextFrame();
+            }
 
             onEndOfFrame?.Invoke(dt);
+        }
+
+        private void HandleDraw(double _)
+        {
+            Draw(updateStep);
         }
 
         private void Update(double dt)

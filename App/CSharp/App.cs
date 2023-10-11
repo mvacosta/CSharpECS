@@ -41,6 +41,11 @@ namespace App
 
         public static ECSManager ECSManager { get; internal set; } = null;
 
+        public static void DrawNextFrame()
+        {
+            AppInstance.drawNextFrame = true;
+        }
+
         #endregion
 
         #region App Game Instance
@@ -50,6 +55,8 @@ namespace App
             private DeltaHandler handleUpdate = null;
             private DeltaHandler handleDraw = null;
 
+            internal static bool drawNextFrame = false;
+
             internal AppInstance()
             {
                 GraphicsDeviceManager = new GraphicsDeviceManager(this)
@@ -57,7 +64,7 @@ namespace App
                     PreferredBackBufferWidth = 1280,
                     PreferredBackBufferHeight = 720,
                     IsFullScreen = false,
-                    SynchronizeWithVerticalRetrace = false
+                    SynchronizeWithVerticalRetrace = true
                 };
 
                 IsFixedTimeStep = false;
@@ -83,6 +90,8 @@ namespace App
 
             protected override void Dispose(bool disposing)
             {
+                drawNextFrame = false;
+
                 UpdateManager.OnUpdate -= HandleExitGameInput;
                 UpdateManager.OnDraw -= HandleClearScreen;
 
@@ -125,8 +134,20 @@ namespace App
                 base.Update(gameTime);
             }
 
+            protected override bool BeginDraw()
+            {
+                if (drawNextFrame)
+                {
+                    return base.BeginDraw();
+                }
+
+                return false;
+            }
+
             protected override void Draw(GameTime gameTime)
             {
+                drawNextFrame = false;
+
                 handleDraw(gameTime.ElapsedGameTime.TotalSeconds);
 
                 base.Draw(gameTime);
