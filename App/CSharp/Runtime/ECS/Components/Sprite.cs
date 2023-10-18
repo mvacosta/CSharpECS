@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace App.ECS
 {
-    public class Sprite : IComponent<Sprite>
+    public sealed class Sprite : IComponent<Sprite>
     {
         public Texture2D Texture;
         public Vector2 Origin;
@@ -29,11 +29,21 @@ namespace App.ECS
 
         #region Overrides and Operators
 
-        public override bool Equals(object obj) => obj is Sprite c && Equals(c);
+        public override bool Equals(object obj) => Equals(obj as Sprite);
 
-        public bool Equals(Sprite other) => ReferenceEquals(this, other);
+        public bool Equals(Sprite other)
+        {
+            if (other is null) return false;
 
-        public int CompareTo(Sprite other) => ReferenceEquals(this, other) ? 0 : 1;
+            return ReferenceEquals(this, other);
+        }
+
+        public int CompareTo(Sprite other)
+        {
+            if (other is null) return 1;
+
+            return ReferenceEquals(this, other) ? 0 : 1;
+        }
 
         public override int GetHashCode() => Texture.GetHashCode();
 

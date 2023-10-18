@@ -72,6 +72,8 @@
     <Folder Include="CSharp\" />
     <Folder Include="CSharp\Runtime\" />
     <Folder Include="CSharp\Runtime\Update\" />
+    <Folder Include="CSharp\Runtime\ECS\Components\Physics\" />
+    <Folder Include="CSharp\Runtime\ECS\Systems\Rendering\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\FNA\FNA.csproj">
@@ -95,9 +97,12 @@
     <Compile Include="CSharp\Runtime\ECS\Components\TagComponents.cs" />
     <Compile Include="CSharp\Runtime\ECS\Components\Sprite.cs" />
     <Compile Include="CSharp\Runtime\ECS\Components\Transform.cs" />
-    <Compile Include="CSharp\Runtime\ECS\Systems\SpriteRendererSystem.cs" />
     <Compile Include="CSharp\Runtime\ECS\Core\ComponentContainer.cs" />
     <Compile Include="CSharp\Runtime\ECS\Core\GetArchetypes.cs" />
+    <Compile Include="CSharp\Runtime\ECS\Components\Physics\AngularVelocity.cs" />
+    <Compile Include="CSharp\Runtime\ECS\Components\Physics\MotionVelocity.cs" />
+    <Compile Include="CSharp\Runtime\ECS\Components\Physics\OrbitalVelocity.cs" />
+    <Compile Include="CSharp\Runtime\ECS\Systems\Rendering\SpriteRendererSystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\TestTexture.png" />

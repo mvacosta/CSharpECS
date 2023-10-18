@@ -1,7 +1,7 @@
 ﻿// THIS IS FOR TEMPLATE PURPOSES ONLY. DO NOT USE.
 namespace App.ECS
 {
-    public struct Component : IComponent<Component>
+    public sealed class Component : IComponent<Component>
     {
         // Properties go here
 
@@ -12,21 +12,25 @@ namespace App.ECS
 
         #region Overrides and Operators
 
-        public override readonly bool Equals(object obj)
-        {
-            if (obj is not Component c)
-                return false;
+        public override bool Equals(object obj) => Equals(obj as Component);
 
-            return Equals(c);
+        public bool Equals(Component other)
+        {
+            if (other is null) return false;
+
+            return ReferenceEquals(this, other); //property == other.property;
         }
 
-        public readonly bool Equals(Component other) => ReferenceEquals(this, other);
+        public int CompareTo(Component other)
+        {
+            if (other is null) return 1;
 
-        public readonly int CompareTo(Component other) => ReferenceEquals(this, other) ? 0 : 1;
+            return ReferenceEquals(this, other) ? 0 : 1; //property.CompareTo(other.property);
+        }
 
-        public override readonly int GetHashCode() => 0; // property.GetHashCode();
+        public override int GetHashCode() => 0; // property.GetHashCode();
 
-        public override readonly string ToString() => $"Custom ToString()";
+        public override string ToString() => $"Custom ToString()";
 
         public static bool operator ==(Component c1, Component c2) => c1.Equals(c2);
 

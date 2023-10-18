@@ -1,6 +1,6 @@
 ﻿namespace App.ECS
 {
-    public class EntityName : IComponent<EntityName>
+    public sealed class EntityName : IComponent<EntityName>
     {
         public const string DEFAULT_NAME = "(unnamed)";
 
@@ -13,22 +13,28 @@
 
         #region Overrides and Operators
 
-        public override bool Equals(object obj) => obj is EntityName c && Equals(c);
+        public override bool Equals(object obj) => Equals(obj as EntityName);
 
-        public bool Equals(EntityName other) => ReferenceEquals(this, other) || Name == other.Name;
+        public bool Equals(EntityName other)
+        {
+            if (other is null) return false;
+
+            return ReferenceEquals(this, other) || Name == other.Name;
+        }
 
         public int CompareTo(EntityName other)
         {
-            if (string.IsNullOrEmpty(Name))
+            if (other is null) return 1;
+
+            if (string.IsNullOrWhiteSpace(Name))
             {
-                if (string.IsNullOrEmpty(other.Name))
+                if (string.IsNullOrWhiteSpace(other.Name))
                     return 0;
 
                 return -1;
             }
 
-            if (string.IsNullOrEmpty(other.Name))
-                return 1;
+            if (string.IsNullOrWhiteSpace(other.Name)) return 1;
 
             return Name.CompareTo(other.Name);
         }

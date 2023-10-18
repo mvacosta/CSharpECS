@@ -17,30 +17,17 @@ namespace App.ECS
 
         public bool Equals(Entity other)
         {
-            if (other is null)
-                return false;
+            if (other is null) return false;
 
-            if (GetType() != other.GetType())
-                return false;
-
-            if (ReferenceEquals(this, other))
-                return true;
-
-            return ID.Equals(other.ID);
+            return ReferenceEquals(this, other) || ID.Equals(other.ID);
         }
 
         public int CompareTo(Entity other)
         {
-            if (other is null)
+            if (other is null || GetType() != other.GetType())
                 return 1;
 
-            if (GetType() != other.GetType())
-                return 1;
-
-            if (ReferenceEquals(this, other))
-                return 0;
-
-            return ID.CompareTo(other.ID);
+            return ReferenceEquals(this, other) ? 0 : ID.CompareTo(other.ID);
         }
 
         public override int GetHashCode() => ID;

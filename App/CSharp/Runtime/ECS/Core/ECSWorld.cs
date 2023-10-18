@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace App.ECS
@@ -9,7 +7,6 @@ namespace App.ECS
     {
         private ECSManager ecsManager = App.ECSManager;
 
-        private HashSet<Entity> entities = new();
         private Dictionary<Type, ComponentContainer> components = new();
         private Dictionary<Type, AbstractSystem> systems = new();
 
@@ -17,6 +14,8 @@ namespace App.ECS
             => components[typeof(T)] as ComponentContainer<T>;
 
         public string WorldName { get; set; } = "New World";
+
+        public HashSet<Entity> Entities { get; private set; } = new();
 
         protected override void DisposeManagedResources()
         {
@@ -40,30 +39,11 @@ namespace App.ECS
         protected override void DisposeUnmanagedResources()
         {
             // Entities are managed by ECSManager so return them first
-            ecsManager.ReturnEntities(entities);
+            ecsManager.ReturnEntities(Entities);
             ecsManager = null;
 
-            entities?.Clear();
-            entities = null;
-        }
-
-        public void TEST()
-        {
-            Texture2D tex = App.Content.Load<Texture2D>("TestTexture");
-
-            float w = App.GraphicsDeviceManager.PreferredBackBufferWidth;
-            float h = App.GraphicsDeviceManager.PreferredBackBufferHeight;
-            var test = new Random();
-            foreach (var entity in entities)
-            {
-                AttachComponent(entity, new Transform(new Vector3((float)test.NextDouble() * w,
-                                                                  (float)test.NextDouble() * h, 0.0f),
-                                                      new Vector3(1.0f, 1.0f, (float)test.NextDouble() * 0.8f + 0.2f)));
-
-                AttachComponent(entity, new Sprite(tex, new Color((float)test.NextDouble(),
-                                                                  (float)test.NextDouble(),
-                                                                  (float)test.NextDouble(), 1.0f)));
-            }
+            Entities?.Clear();
+            Entities = null;
         }
 
         #region Component
@@ -265,9 +245,9 @@ namespace App.ECS
 
         public void ReceiveEntities(HashSet<Entity> newEntities)
         {
-            entities.UnionWith(newEntities);
+            Entities.UnionWith(newEntities);
 
-            AttachComponents(entities, new EntityName(EntityName.DEFAULT_NAME));
+            AttachComponents(Entities, new EntityName(EntityName.DEFAULT_NAME));
         }
 
         #endregion

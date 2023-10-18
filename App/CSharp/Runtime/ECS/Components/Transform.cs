@@ -2,7 +2,7 @@
 
 namespace App.ECS
 {
-    public class Transform : IComponent<Transform>
+    public sealed class Transform : IComponent<Transform>
     {
         public Vector3 Position;
         public Quaternion Rotation;
@@ -25,11 +25,21 @@ namespace App.ECS
 
         #region Overrides and Operators
 
-        public override bool Equals(object obj) => obj is Transform c && Equals(c);
+        public override bool Equals(object obj) => Equals(obj as Transform);
 
-        public bool Equals(Transform other) => ReferenceEquals(this, other);
+        public bool Equals(Transform other)
+        {
+            if (other is null) return false;
 
-        public int CompareTo(Transform other) => ReferenceEquals(this, other) ? 0 : 1;
+            return ReferenceEquals(this, other);
+        }
+
+        public int CompareTo(Transform other)
+        {
+            if (other is null) return 1;
+
+            return ReferenceEquals(this, other) ? 0 : 1;
+        }
 
         public override int GetHashCode() => (Position.GetHashCode() * 3)
                                            + (Rotation.GetHashCode() * 7)
