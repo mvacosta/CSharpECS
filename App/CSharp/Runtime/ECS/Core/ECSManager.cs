@@ -15,7 +15,7 @@ namespace App.ECS
         private HashSet<Entity> entities = new(ENTITY_INIT_COUNT * 2);
         private HashSet<ECSWorld> worlds = new();
 
-        public int AvailableEntities { get { return entities.Count; } }
+        public int Available { get { return entities.Count; } }
 
         public ECSManager()
         {

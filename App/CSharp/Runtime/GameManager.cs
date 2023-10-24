@@ -12,32 +12,46 @@ namespace App
 
         public GameManager()
         {
-            App.UpdateManager.CallNextFrame(TEST); // TEST
+            //App.UpdateManager.CallNextFrame(SpriteRendererTest);
+            App.UpdateManager.CallNextFrame(PhysicsTest);
         }
 
-        private void TEST()
+        private void PhysicsTest()
         {
-            ECSWorld appWorld = App.ECSManager.AddWorld();
+            ECSWorld world = App.ECSManager.AddWorld();
 
-            App.ECSManager.RequestEntities(ref appWorld, 10000);
+            App.ECSManager.RequestEntities(ref world, App.ECSManager.Available);
+
+            Model m = App.Content.Load<Model>("Earth");
+
+
+
+            world.AddSystem<BasicEffectSystem>();
+        }
+
+        private void SpriteRendererTest()
+        {
+            ECSWorld world = App.ECSManager.AddWorld();
+
+            App.ECSManager.RequestEntities(ref world, 10000);
 
             Texture2D tex = App.Content.Load<Texture2D>("TestTexture");
 
             float w = App.GraphicsDeviceManager.PreferredBackBufferWidth;
             float h = App.GraphicsDeviceManager.PreferredBackBufferHeight;
             var test = new Random();
-            foreach (var entity in appWorld.Entities)
+            foreach (var entity in world.Entities)
             {
-                appWorld.AttachComponent(entity, new Transform(new Vector3((float)test.NextDouble() * w,
-                                                                           (float)test.NextDouble() * h, 0.0f),
-                                                      new Vector3(1.0f, 1.0f, (float)test.NextDouble() * 0.8f + 0.2f)));
+                world.AttachComponent(entity, new Transform(new Vector3((float)test.NextDouble() * w,
+                                                                        (float)test.NextDouble() * h, 0.0f),
+                                                            new Vector3(1.0f, 1.0f, (float)test.NextDouble() * 0.8f + 0.2f)));
 
-                appWorld.AttachComponent(entity, new Sprite(tex, new Color((float)test.NextDouble(),
-                                                                  (float)test.NextDouble(),
-                                                                  (float)test.NextDouble(), 1.0f)));
+                world.AttachComponent(entity, new Sprite(tex, new Color((float)test.NextDouble(),
+                                                                        (float)test.NextDouble(),
+                                                                        (float)test.NextDouble(), 1.0f)));
             }
 
-            appWorld.AddSystem<SpriteRendererSystem>();
+            world.AddSystem<SpriteRendererSystem>();
         }
 
         protected override void DisposeManagedResources()

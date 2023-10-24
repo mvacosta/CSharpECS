@@ -103,12 +103,19 @@
     <Compile Include="CSharp\Runtime\ECS\Components\Physics\MotionVelocity.cs" />
     <Compile Include="CSharp\Runtime\ECS\Components\Physics\OrbitalVelocity.cs" />
     <Compile Include="CSharp\Runtime\ECS\Systems\Rendering\SpriteRendererSystem.cs" />
+    <Compile Include="CSharp\Runtime\ECS\Systems\Rendering\BasicEffectSystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\TestTexture.png" />
     <None Include="Content\TestSFX.wav" />
     <None Include="CSharp\Runtime\ECS\Components\_ComponentTemplate_" />
     <None Include="packages.config" />
+    <None Include="Content\Earth\Earth.obj" />
+    <None Include="Content\Earth\Diffuse.png" />
+    <None Include="Content\Earth\Clouds.png" />
+    <None Include="Content\Earth\Bump.png" />
+    <None Include="Content\Earth\Night.png" />
+    <None Include="Content\Earth\OceanMask.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
